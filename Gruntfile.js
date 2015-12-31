@@ -138,10 +138,13 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-    // add your deploy tasks here
-    'build', 'gitpush'
-  ]);
-
+  grunt.registerTask('deploy', function() {
+    grunt.task.run([ 'build' ]);
+    if (grunt.option('prod')) {
+      grunt.task.run([ 'gitpush' ]);
+    } else {
+      grunt.task.run([ 'server-dev' ]);
+    }
+  });
 
 };
