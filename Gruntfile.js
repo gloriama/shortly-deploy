@@ -71,6 +71,15 @@ module.exports = function(grunt) {
       prodServer: {
       }
     },
+
+    gitpush: {
+      your_target: {
+        options: {
+          remote: 'azure',
+          branch: 'master'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -81,6 +90,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -95,6 +105,19 @@ module.exports = function(grunt) {
     grunt.task.run([ 'watch' ]);
   });
 
+  // grunt.registerTask('server-prod', function (target) {
+  //   // Running nodejs in a different process and displaying output on the main console
+  //   var gitPushAzure = grunt.util.spawn({
+  //        cmd: 'grunt',
+  //        grunt: true,
+  //        args: ['git', 'push', 'azure', 'master']
+  //   });
+  //   gitPushAzure.stdout.pipe(process.stdout);
+  //   gitPushAzure.stderr.pipe(process.stderr);
+
+  //   grunt.task.run([ 'watch' ]);
+  // });
+
   ////////////////////////////////////////////////////
   // Main grunt tasks
   ////////////////////////////////////////////////////
@@ -104,7 +127,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'concat', 'uglify'
+    'concat', 'uglify', 'jshint', 'mochaTest'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -117,7 +140,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
-    'build', 'server-dev'
+    'build', 'gitpush'
   ]);
 
 
